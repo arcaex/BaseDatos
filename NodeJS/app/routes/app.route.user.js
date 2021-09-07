@@ -3,4 +3,6 @@ module.exports = function (app) {
 	app.route('/user')
 		.get(router.getUsers)
 		.delete(router.delUser)
+		.post(router.addUser)
+		.put(router.modifyUser)
 };
