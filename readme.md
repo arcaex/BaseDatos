@@ -15,7 +15,7 @@ https://docs.mongodb.com/manual/tutorial/update-documents/
 db.Coleccion.updateOne({{"key":"value"}}, {$set: {"keyReemplazo","valueReemplazo"}})
 db.Coleccion.updateMany({{"key":"value"}}, {$set: {"keyReemplazo","valueReemplazo"}})
 
-# Para Buscar Registros#
+# Para Buscar Registros
 https://docs.mongodb.com/manual/tutorial/query-documents/
 
 db.Coleccion.find({"key":"value"})
