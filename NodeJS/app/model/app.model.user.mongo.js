@@ -1,4 +1,5 @@
 var mongo = require('mongodb')
+var mongoObjectID = require('mongodb').ObjectId;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/utnTest";
 
@@ -14,18 +15,32 @@ User.getlistUsers = function getlistUser(result) {
         if (err) throw err; 
         console.log("¡Base de datos conectada!"); 
         var dbo = db.db("utnTest");
-        var results = dbo.collection("users").find({});
-        const arrayResult = [];
-        results.forEach(element => {
-            arrayResult.push(element);
-        });
-        console.log(arrayResult);
-        result(null,arrayResult);
+        dbo.collection("users").find({}).toArray(
+            function(err,res){
+                if (err) throw err; 
+                result(null,res);
+                db.close();
+            }
+        )
     });
 };
 
-User.deleteUser = function deleteUser(id_user, result) {
-
+User.deleteUser = function deleteUser(id, result) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        console.log("¡Base de datos conectada!");
+        var dbo = db.db("utnTest");
+        var objectId = new mongoObjectID(id);
+        dbo.collection("users").deleteOne({ "_id": objectId },
+            function (err, res) {
+                if (err) {
+                    result(null, err);
+                } else {
+                    result(null, res);
+                }
+                db.close();
+            });
+    });
 };
 
 User.addUser = function addUser(body, result) {
@@ -46,7 +61,23 @@ User.addUser = function addUser(body, result) {
 };
 
 User.modifyUser = function modifyUser(body, result) {
-
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        console.log("¡Base de datos conectada!");
+        var dbo = db.db("utnTest");
+        var objectId = new mongoObjectID(body.id);
+        var query = { "_id" : objectId };
+        var values = { $set : { "username": body.username , "password": body.password } };
+        dbo.collection("users").updateOne( query , values ,
+            function (err, res) {
+                if (err) {
+                    result(null, err);
+                } else {
+                    result(null, res);
+                }
+                db.close();
+            });
+    });
 };
 
 

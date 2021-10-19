@@ -13,7 +13,7 @@ exports.getUsers = function (request, response) {
 
 exports.delUser = function (request, response) {
 	const body = request.body;
-	User.deleteUser(body.id_user, function (error, User) {
+	User.deleteUser(body.id, function (error, User) {
 		if (error) {
 			response.send(error);
 		} else {
